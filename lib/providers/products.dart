@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import './product.dart';
 
@@ -65,6 +67,17 @@ class Products with ChangeNotifier {
   // }
 
   void addProduct(Product product) {
+    var url = Uri.parse(
+        'https://flutter-auth-ce5c5-default-rtdb.firebaseio.com/products.json');
+    http.post(url,
+        body: json.encode({
+          'title': product.title,
+          'price': product.price,
+          'description': product.description,
+          'isFavorite': product.isFavorite,
+          'imageUrl': product.imageUrl
+        }));
+
     final newProduct = Product(
       title: product.title,
       description: product.description,
