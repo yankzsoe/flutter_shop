@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import './product.dart';
+import './../models/http_exception.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = [
@@ -137,8 +138,19 @@ class Products with ChangeNotifier {
     }
   }
 
-  void deleteProduct(String id) {
-    _items.removeWhere((prod) => prod.id == id);
+  Future<void> deleteProduct(String id) async {
+    final url = Uri.parse(
+        'https://flutter-auth-ce5c5-default-rtdb.firebaseio.com/products/$id.json');
+    final existingIdx = _items.indexWhere((prod) => prod.id == id);
+    var existingProd = _items[existingIdx];
+    _items.removeAt(existingIdx);
     notifyListeners();
+    var response = await http.delete(url);
+    if (response.statusCode >= 400) {
+      _items.insert(existingIdx, existingProd);
+      notifyListeners();
+      throw HttpException('Cloud not delete product.');
+    }
+    existingProd = null;
   }
 }
