@@ -55,3 +55,7 @@ _ReSharper*/
 .vs/
 #Nuget packages folder
 packages/
+/lib/generated_plugin_registrant.dart
+/android/app/google-services.json
+/.flutter-plugins
+/.flutter-plugins-dependencies
