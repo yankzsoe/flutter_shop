@@ -25,6 +25,35 @@ class Orders with ChangeNotifier {
     return [..._orders];
   }
 
+  Future<void> FetchAndSetOrders() async {
+    var url = Uri.parse(
+        'https://flutter-auth-ce5c5-default-rtdb.firebaseio.com/orders.json');
+    final response = await http.get(url);
+    List<OrderItem> _loadedOrders = [];
+    final extractedData = json.decode(response.body) as Map<String, dynamic>;
+    if (extractedData == null) {
+      _orders = [];
+      notifyListeners();
+      return;
+    }
+    extractedData.forEach((orderId, orderItem) {
+      _loadedOrders.add(OrderItem(
+        id: orderId,
+        amount: orderItem['amount'],
+        dateTime: DateTime.parse(orderItem['dateTime']),
+        products: (orderItem['products'] as List<dynamic>)
+            .map((e) => CartItem(
+                id: e['id'],
+                title: e['title'],
+                quantity: e['quantity'],
+                price: e['price']))
+            .toList(),
+      ));
+    });
+    _orders = _loadedOrders.reversed.toList();
+    notifyListeners();
+  }
+
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
     var url = Uri.parse(
         'https://flutter-auth-ce5c5-default-rtdb.firebaseio.com/orders.json');
@@ -32,7 +61,7 @@ class Orders with ChangeNotifier {
       final timestamp = DateTime.now();
       final response = await http.post(url,
           body: json.encode({
-            'amount': total,
+            'amount': double.parse(total.toStringAsFixed(2)),
             'dateTime': timestamp.toIso8601String(),
             'products': cartProducts
                 .map((cp) => {
