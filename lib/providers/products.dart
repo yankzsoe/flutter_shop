@@ -6,6 +6,8 @@ import './product.dart';
 import './../models/http_exception.dart';
 
 class Products with ChangeNotifier {
+  final String authToken;
+  Products(this.authToken, this._items);
   List<Product> _items = [
     // Product(
     //   id: 'p1',
@@ -68,8 +70,8 @@ class Products with ChangeNotifier {
   // }
 
   Future<void> fetchAndSetProduct() async {
-    var url = Uri.parse(
-        'https://flutter-auth-ce5c5-default-rtdb.firebaseio.com/products.json');
+    final url = Uri.parse(
+        'https://flutter-auth-ce5c5-default-rtdb.firebaseio.com/products.json?auth=$authToken');
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -94,7 +96,7 @@ class Products with ChangeNotifier {
 
   Future<void> addProduct(Product product) async {
     var url = Uri.parse(
-        'https://flutter-auth-ce5c5-default-rtdb.firebaseio.com/products.json');
+        'https://flutter-auth-ce5c5-default-rtdb.firebaseio.com/products.json?auth=$authToken');
     try {
       var response = await http.post(url,
           body: json.encode({
@@ -123,7 +125,7 @@ class Products with ChangeNotifier {
   Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     final url = Uri.parse(
-        'https://flutter-auth-ce5c5-default-rtdb.firebaseio.com/products/$id.json');
+        'https://flutter-auth-ce5c5-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken');
     if (prodIndex >= 0) {
       await http.patch(url,
           body: json.encode({
@@ -141,7 +143,7 @@ class Products with ChangeNotifier {
 
   Future<void> deleteProduct(String id) async {
     final url = Uri.parse(
-        'https://flutter-auth-ce5c5-default-rtdb.firebaseio.com/products/$id.json');
+        'https://flutter-auth-ce5c5-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken');
     final existingIdx = _items.indexWhere((prod) => prod.id == id);
     var existingProd = _items[existingIdx];
     _items.removeAt(existingIdx);
