@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/models/http_exception.dart';
@@ -168,6 +169,7 @@ class _AuthCardState extends State<AuthCard> {
       }
       _showErrorDialog(errorMessage);
     } catch (error) {
+      dev.log('Error on auth screen ${error.toString()}');
       const errorMessage =
           'Could not authenticate you. Please try again later.';
       _showErrorDialog(errorMessage);
@@ -215,7 +217,6 @@ class _AuthCardState extends State<AuthCard> {
                     if (value.isEmpty || !value.contains('@')) {
                       return 'Invalid email!';
                     }
-                    return null;
                     return null;
                   },
                   onSaved: (value) {
