@@ -70,9 +70,11 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future<void> fetchAndSetProduct() async {
+  Future<void> fetchAndSetProduct([bool filterByUser = false]) async {
+    final filterValue =
+        filterByUser ? 'orderBy="createdBy"&equalTo="$userId"' : '';
     var url = Uri.parse(
-        'https://flutter-auth-ce5c5-default-rtdb.firebaseio.com/products.json?auth=$authToken');
+        'https://flutter-auth-ce5c5-default-rtdb.firebaseio.com/products.json?auth=$authToken&$filterValue');
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -90,6 +92,7 @@ class Products with ChangeNotifier {
           price: prodData['price'],
           isFavorite: favData == null ? false : favData[prodId] ?? false,
           imageUrl: prodData['imageUrl'],
+          createdBy: prodData["createdBy"],
         ));
       });
       _items = _loadedData;
@@ -108,7 +111,8 @@ class Products with ChangeNotifier {
             'title': product.title,
             'price': product.price,
             'description': product.description,
-            'imageUrl': product.imageUrl
+            'imageUrl': product.imageUrl,
+            'createdBy': userId,
           }));
 
       final newProduct = Product(
@@ -117,6 +121,7 @@ class Products with ChangeNotifier {
         price: product.price,
         imageUrl: product.imageUrl,
         id: json.decode(response.body)['name'],
+        createdBy: userId,
       );
       _items.add(newProduct);
       notifyListeners();
@@ -136,7 +141,8 @@ class Products with ChangeNotifier {
             'title': newProduct.title,
             'description': newProduct.description,
             'imageUrl': newProduct.imageUrl,
-            'price': newProduct.price
+            'price': newProduct.price,
+            'createdBy': userId,
           }));
       _items[prodIndex] = newProduct;
       notifyListeners();
