@@ -30,6 +30,8 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"></script>
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
@@ -39,6 +41,21 @@
         navigator.serviceWorker.register('flutter_service_worker.js');
       });
     }
+  </script>
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyDWckRnodLUVZgYrosqQBmVDwK3PyM8yS0",
+      authDomain: "https://identitytoolkit.googleapis.com",
+      databaseURL: "https://flutter-auth-ce5c5-default-rtdb.firebaseio.com",
+      projectId: "flutter-auth-ce5c5",
+      storageBucket: "flutter-auth-ce5c5.appspot.com",
+      messagingSenderId: "1055718893330",
+      appId: "flutter-auth-ce5c5",
+      measurementId: "",
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
   </script>
   <script src="main.dart.js" type="application/javascript"></script>
 </body>
