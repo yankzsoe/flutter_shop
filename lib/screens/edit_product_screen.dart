@@ -17,6 +17,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _imageUrlController = TextEditingController();
   final _imageUrlFocusNode = FocusNode();
   final _form = GlobalKey<FormState>();
+  bool _editMode = false;
   var _editedProduct = Product(
     id: null,
     title: '',
@@ -44,6 +45,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (_isInit) {
       final productId = ModalRoute.of(context).settings.arguments as String;
       if (productId != null) {
+        _editMode = true;
         _editedProduct =
             Provider.of<Products>(context, listen: false).findById(productId);
         _initValues = {
@@ -125,7 +127,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Product'),
+        title: _editMode ? Text('Edit Product') : Text('New Product'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
