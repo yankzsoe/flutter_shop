@@ -102,8 +102,11 @@ class _AuthCardState extends State<AuthCard>
     'email': '',
     'password': '',
   };
+
   var _isLoading = false;
   final _passwordController = TextEditingController();
+  var _isValidateMode = false;
+
   AnimationController _controller;
   Animation<double> _opacityAnimation;
   Animation<Offset> _slideAnimation;
@@ -207,6 +210,7 @@ class _AuthCardState extends State<AuthCard>
   }
 
   void _switchAuthMode() {
+    _resetValidateMessage();
     if (_authMode == AuthMode.Login) {
       setState(() {
         _authMode = AuthMode.Signup;
@@ -218,6 +222,12 @@ class _AuthCardState extends State<AuthCard>
       });
       _controller.reverse();
     }
+  }
+
+  void _resetValidateMessage() {
+    _isValidateMode = false;
+    _formKey.currentState.validate();
+    _isValidateMode = true;
   }
 
   @override
@@ -245,6 +255,7 @@ class _AuthCardState extends State<AuthCard>
                   decoration: InputDecoration(labelText: 'E-Mail'),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
+                    if (!_isValidateMode) return null;
                     if (value.isEmpty || !value.contains('@')) {
                       return 'Invalid email!';
                     }
@@ -259,6 +270,7 @@ class _AuthCardState extends State<AuthCard>
                   obscureText: true,
                   controller: _passwordController,
                   validator: (value) {
+                    if (!_isValidateMode) return null;
                     if (value.isEmpty || value.length < 6) {
                       return 'Password is too short!';
                     } else {
@@ -287,6 +299,7 @@ class _AuthCardState extends State<AuthCard>
                         obscureText: true,
                         validator: _authMode == AuthMode.Signup
                             ? (value) {
+                                if (!_isValidateMode) return null;
                                 if (value != _passwordController.text) {
                                   return 'Passwords do not match!';
                                 } else {
