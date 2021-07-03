@@ -23,6 +23,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _isLoading = true;
   @override
   void initState() {
+    super.initState();
     Provider.of<Products>(context, listen: false)
         .fetchAndSetProduct()
         .then((_) {
@@ -30,7 +31,6 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         _isLoading = false;
       });
     });
-    super.initState();
   }
 
   @override

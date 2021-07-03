@@ -20,8 +20,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   void initState() {
-    _ordersFuture = _obtainOrdersFuture();
     super.initState();
+    _ordersFuture = _obtainOrdersFuture();
   }
 
   @override
