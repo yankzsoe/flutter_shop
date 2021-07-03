@@ -29,7 +29,7 @@ class Orders with ChangeNotifier {
     return [..._orders];
   }
 
-  Future<void> FetchAndSetOrders() async {
+  Future<void> fetchAndSetOrders() async {
     var url = Uri.parse(
         'https://flutter-auth-ce5c5-default-rtdb.firebaseio.com/orders/$userId.json?auth=$authToken');
     final response = await http.get(url);

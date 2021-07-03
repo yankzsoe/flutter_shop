@@ -33,7 +33,8 @@ class CartScreen extends StatelessWidget {
                     label: Text(
                       '\$${cart.totalAmount.toStringAsFixed(2)}',
                       style: TextStyle(
-                        color: Theme.of(context).primaryTextTheme.title.color,
+                        color:
+                            Theme.of(context).primaryTextTheme.bodyText1.color,
                       ),
                     ),
                     backgroundColor: Theme.of(context).primaryColor,
@@ -78,7 +79,7 @@ class _OrderButtonState extends State<OrderButton> {
   var _isLoading = false;
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
       child: _isLoading ? CircularProgressIndicator() : Text('ORDER NOW'),
       onPressed: (widget.cart.totalAmount <= 0 || _isLoading)
           ? null
@@ -99,7 +100,11 @@ class _OrderButtonState extends State<OrderButton> {
               }
               widget.cart.clear();
             },
-      textColor: Theme.of(context).primaryColor,
+      style: TextButton.styleFrom(
+        textStyle: TextStyle(
+          color: Theme.of(context).primaryColor,
+        ),
+      ),
     );
   }
 }
